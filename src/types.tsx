@@ -6,6 +6,7 @@ export interface UserState {
 export interface UserData {
   state: UserState | null;
   login: Function;
+  register: Function;
 }
 
 export interface User {
@@ -15,7 +16,7 @@ export interface User {
 
 export interface ReducerAction {
   type: string;
-  value: object;
+  value: UserState;
 }
 
 export interface Reducers {

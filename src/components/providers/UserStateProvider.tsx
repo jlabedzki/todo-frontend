@@ -6,6 +6,7 @@ import { UserData, User } from "../../types";
 export const userStateContext = createContext<UserData>({
   state: null,
   login: () => {},
+  register: () => {},
 });
 
 export default function UserStateProvider(props: any) {
@@ -25,6 +26,16 @@ export default function UserStateProvider(props: any) {
           username: data.username,
         },
       });
+      localStorage.setItem("user_id", data.user_id);
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  };
+
+  const register = async (user: User) => {
+    try {
+      const { status } = await axios.post("/register", user);
+      return status;
     } catch (err: any) {
       throw new Error(err.message);
     }
@@ -33,6 +44,7 @@ export default function UserStateProvider(props: any) {
   const userData = {
     state,
     login,
+    register,
   };
 
   return (

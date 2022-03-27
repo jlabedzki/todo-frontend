@@ -39,6 +39,11 @@ form {
 
 #submit {
   margin-top: 1rem;
+  background-color: salmon;
+}
+
+#submit:hover {
+  background-color: rgb(248, 91, 74);
 }
 
 .fields-wrapper {
@@ -52,5 +57,9 @@ form {
   text-align: center;
   min-height: 1.5rem;
   color: red;
-  clear: both;
+}
+
+.success-message {
+  text-align: center;
+  color: green;
 }

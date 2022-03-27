@@ -6,15 +6,19 @@ import { userStateContext } from "../providers/UserStateProvider";
 import "./authentication.scss";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-export default function Login() {
-  const { login } = useContext(userStateContext);
-  const [register, setRegister] = useState(false);
+export default function Authenticate() {
+  const { login, register } = useContext(userStateContext);
+  const [needToRegister, setNeedToRegister] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const authenticationText = register ? "Register" : "Login";
+  const headerText = needToRegister ? "CREATE AN ACCOUNT" : "SIGN IN";
+  const questionText = needToRegister
+    ? "Already have an account? "
+    : "Don't have an account? ";
 
   const validate = async () => {
     if (!username) {
@@ -25,6 +29,16 @@ export default function Login() {
     if (!password) {
       setErrorMessage("Password cannot be blank.");
       return;
+    }
+
+    if (needToRegister) {
+      try {
+        await register({ username, password });
+      } catch (err: any) {
+        if (err.message.includes("409")) {
+          setErrorMessage("Username already exists.");
+        }
+      }
     }
 
     try {
@@ -89,27 +103,22 @@ export default function Login() {
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
-      <div className="form-header">{authenticationText.toUpperCase()}</div>
-      <div className="error-message">{errorMessage}</div>
+      <div className="form-header">{headerText}</div>
+      {successMessage ? (
+        <div className="success-message">{successMessage}</div>
+      ) : (
+        <div className="error-message">{errorMessage}</div>
+      )}
       {textFields}
       <Button id="submit" onClick={validate} variant="contained" size="large">
-        {authenticationText}
+        Submit
       </Button>
-      {!register ? (
-        <div className="form-footer">
-          Don't have an account?{" "}
-          <a id="register" onClick={() => setRegister(true)}>
-            Click here.
-          </a>
-        </div>
-      ) : (
-        <div className="form-footer">
-          Already have an account?{" "}
-          <a id="register" onClick={() => setRegister(false)}>
-            Click here.
-          </a>
-        </div>
-      )}
+      <div className="form-footer">
+        {questionText}
+        <a id="register" onClick={() => setNeedToRegister(!needToRegister)}>
+          Click here.
+        </a>
+      </div>
     </form>
   );
 }

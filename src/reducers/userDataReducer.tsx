@@ -12,7 +12,11 @@ export default function userDataReducer(
 }
 
 const setUserData = (state: UserState, action: ReducerAction) => {
-  return;
+  return {
+    ...state,
+    userId: action.value.userId,
+    username: action.value.username,
+  };
 };
 
 const reducers: Reducers = {
