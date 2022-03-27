@@ -1,7 +1,7 @@
-import "./assets/App.css";
+import "./assets/App.scss";
 import { useContext } from "react";
 import { userStateContext } from "./components/providers/UserStateProvider";
-import Login from "./components/Login";
+import Login from "./components/authentication/Login";
 
 function App() {
   const { state } = useContext(userStateContext);

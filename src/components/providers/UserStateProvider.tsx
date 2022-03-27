@@ -1,6 +1,6 @@
 import { createContext, useReducer } from "react";
 import axios from "axios";
-import userDataReducer, { SET_USER_DATA } from "../../hooks/userDataReducer";
+import userDataReducer, { SET_USER_DATA } from "../../reducers/userDataReducer";
 import { UserData, User } from "../../types";
 
 export const userStateContext = createContext<UserData>({
