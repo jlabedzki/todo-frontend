@@ -1,21 +1,23 @@
-import { ContextType, createContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import axios from "axios";
 import userDataReducer, { SET_USER_DATA } from "../../hooks/userDataReducer";
-import { Context } from "vm";
+import { UserData, User } from "../../types";
 
-export const stateContext = createContext<Context>({
-  value: Object,
+export const userStateContext = createContext<UserData>({
+  state: null,
+  login: () => {},
 });
 
 export default function UserStateProvider(props: any) {
   const [state, dispatch] = useReducer(userDataReducer, {
     userId: null,
-    username: "",
+    username: null,
   });
 
-  const login = (username: string, password: string) => {
-    axios.post("/login", { username, password }).then(({ data }) => {
-      return dispatch({
+  const login = async (user: User) => {
+    try {
+      const { data } = await axios.post("/login", user);
+      dispatch({
         type: SET_USER_DATA,
         value: {
           ...state,
@@ -23,7 +25,9 @@ export default function UserStateProvider(props: any) {
           username: data.username,
         },
       });
-    });
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
   };
 
   const userData = {
@@ -32,8 +36,8 @@ export default function UserStateProvider(props: any) {
   };
 
   return (
-    <stateContext.Provider value={userData}>
+    <userStateContext.Provider value={userData}>
       {props.children}
-    </stateContext.Provider>
+    </userStateContext.Provider>
   );
 }

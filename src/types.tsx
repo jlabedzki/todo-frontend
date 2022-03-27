@@ -1,6 +1,16 @@
 export interface UserState {
-  userId: number;
+  userId: number | null;
+  username: string | null;
+}
+
+export interface UserData {
+  state: UserState | null;
+  login: Function;
+}
+
+export interface User {
   username: string;
+  password: string;
 }
 
 export interface ReducerAction {
