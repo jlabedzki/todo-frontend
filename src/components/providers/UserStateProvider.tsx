@@ -1,16 +1,35 @@
-import { createContext, useReducer } from "react";
+import { createContext, useState } from "react";
+import { useCookies } from "react-cookie";
 import axios from "axios";
-import userDataReducer, { SET_USER_DATA } from "../../reducers/userDataReducer";
-import { UserData, User } from "../../types";
+axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+
+export interface UserState {
+  userId: number | null;
+  username: string | null;
+}
+
+interface UserData {
+  user: UserState | null;
+  login: Function;
+  register: Function;
+  logout: Function;
+}
+
+interface User {
+  username: string;
+  password: string;
+}
 
 export const userStateContext = createContext<UserData>({
-  state: null,
+  user: null,
   login: () => {},
   register: () => {},
+  logout: () => {},
 });
 
 export default function UserStateProvider(props: any) {
-  const [state, dispatch] = useReducer(userDataReducer, {
+  const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
+  const [user, setUser] = useState<UserState>({
     userId: null,
     username: null,
   });
@@ -18,15 +37,13 @@ export default function UserStateProvider(props: any) {
   const login = async (user: User) => {
     try {
       const { data } = await axios.post("/login", user);
-      dispatch({
-        type: SET_USER_DATA,
-        value: {
-          ...state,
-          userId: data.user_id,
-          username: data.username,
-        },
+      setCookie("access_token", data.access_token, {
+        path: "/",
       });
-      localStorage.setItem("user_id", data.user_id);
+      setUser({
+        userId: data.user_id,
+        username: data.username,
+      });
     } catch (err: any) {
       throw new Error(err.message);
     }
@@ -41,10 +58,24 @@ export default function UserStateProvider(props: any) {
     }
   };
 
+  const logout = async () => {
+    try {
+      await axios.get("/logout", {
+        headers: {
+          Authorization: `Bearer ${cookies.access_token}`,
+        },
+      });
+      removeCookie("access_token");
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
+  };
+
   const userData = {
-    state,
+    user,
     login,
     register,
+    logout,
   };
 
   return (

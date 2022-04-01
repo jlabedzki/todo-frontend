@@ -2,16 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./assets/index.scss";
 import App from "./App";
-import axios from "axios";
 import UserStateProvider from "./components/providers//UserStateProvider";
-
-axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
+import { CookiesProvider } from "react-cookie";
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserStateProvider>
-      <App />
-    </UserStateProvider>
+    <CookiesProvider>
+      <UserStateProvider>
+        <App />
+      </UserStateProvider>
+    </CookiesProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

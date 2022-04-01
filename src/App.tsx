@@ -1,15 +1,15 @@
 import "./assets/App.scss";
-import { useContext } from "react";
-import { userStateContext } from "./components/providers/UserStateProvider";
-import Authenticate from "./components/authentication/Authenticate";
+import { useCookies } from "react-cookie";
+import Authenticate from "./components/authentication/Login";
+import Dashboard from "./views/Dashboard";
 
 function App() {
-  const { state } = useContext(userStateContext);
+  const [cookies] = useCookies();
+
+  console.log("cookies", cookies);
 
   return (
-    <>
-      {!state?.userId ? <Authenticate></Authenticate> : <div>hello world</div>}
-    </>
+    <>{!cookies.access_token ? <Authenticate></Authenticate> : <Dashboard />}</>
   );
 }
 
