@@ -1,21 +1,15 @@
-import React from "react";
-import "./App.css";
+import "./assets/App.scss";
+import { useCookies } from "react-cookie";
+import Authenticate from "./components/authentication/Login";
+import Dashboard from "./views/Dashboard";
 
 function App() {
+  const [cookies] = useCookies();
+
+  console.log("cookies", cookies);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello World.</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>{!cookies.access_token ? <Authenticate></Authenticate> : <Dashboard />}</>
   );
 }
 

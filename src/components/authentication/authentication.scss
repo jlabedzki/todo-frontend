@@ -1,0 +1,66 @@
+@import "../../assets/variables.scss";
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-self: center;
+  justify-content: center;
+  width: 400px;
+  height: 400px;
+  padding: 1rem;
+  margin-top: 10rem;
+  background-color: white;
+  border-radius: 0.2rem;
+}
+
+.form-header {
+  align-self: center;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  color: $color-primary;
+  font-family: $font-primary;
+  font-weight: bold;
+}
+
+.form-footer {
+  margin-top: 2rem;
+  font: $font-primary;
+  color: $color-primary;
+  text-align: center;
+}
+
+#register {
+  color: rgb(85, 164, 255);
+}
+
+#register:hover {
+  cursor: pointer;
+}
+
+#submit {
+  margin-top: 1rem;
+  background-color: salmon;
+}
+
+#submit:hover {
+  background-color: rgb(248, 91, 74);
+}
+
+.fields-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-self: flex-end;
+}
+
+.error-message {
+  text-align: center;
+  min-height: 1.5rem;
+  color: red;
+}
+
+.success-message {
+  text-align: center;
+  min-height: 1.5rem;
+  color: green;
+}
