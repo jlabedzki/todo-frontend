@@ -2,9 +2,9 @@ import { TextField, Button, InputAdornment, IconButton } from "@mui/material";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import { useContext, useState } from "react";
-import { userStateContext } from "../providers/UserStateProvider";
+import { userStateContext } from "../context/AuthProvider";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import "./authentication.scss";
+import "../assets/authentication.scss";
 
 export default function Authenticate() {
   const { login, register } = useContext(userStateContext);

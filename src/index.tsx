@@ -2,15 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./assets/index.scss";
 import App from "./App";
-import UserStateProvider from "./components/providers//UserStateProvider";
+import AuthProvider from "./context/AuthProvider";
 import { CookiesProvider } from "react-cookie";
 
 ReactDOM.render(
   <React.StrictMode>
     <CookiesProvider>
-      <UserStateProvider>
+      <AuthProvider>
         <App />
-      </UserStateProvider>
+      </AuthProvider>
     </CookiesProvider>
   </React.StrictMode>,
   document.getElementById("root")

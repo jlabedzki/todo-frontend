@@ -1,13 +1,18 @@
-import { useCookies } from "react-cookie";
 import axios from "axios";
-import { UserState } from "../components/providers/UserStateProvider";
-import { AuthenticationError, BackendError } from "../errors";
+import { useCookies } from "react-cookie";
 
 type Method = "get" | "post" | "put" | "patch" | "delete";
 
-export default function useTodoAPI(user: UserState) {
+interface Todo {
+  id?: number;
+  title: string;
+  date: Date;
+  priority?: number;
+  completed?: boolean;
+}
+
+export default function useTodoAPI(userId?: number) {
   const [cookies] = useCookies();
-  const id = user.userId;
 
   const client = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
@@ -22,10 +27,10 @@ export default function useTodoAPI(user: UserState) {
     },
     (error) => {
       if (error.response.status === 401) {
-        //TODO: implement redirect to login page, need to get react-router setup
-        throw new AuthenticationError();
+        //Todo: redirec to  login
+        throw new Error("Failed to authenticate request");
       }
-      throw new BackendError("Could not fetch data");
+      throw new Error("Failed to fetch data from API");
     }
   );
 
@@ -37,11 +42,23 @@ export default function useTodoAPI(user: UserState) {
     });
   };
 
-  const getTodos = () => {
-    return perform("get", `/todos/${id}`);
+  const getUser = () => {
+    return perform("get", "/user");
   };
 
+  const getTodos = () => {
+    return perform("get", `/todos/${userId}`);
+  };
+
+  const postTodo = (todo: Todo) => {
+    return perform("post", `/todos/${userId}`, todo);
+  };
+
+  const patchTodo = (todo: Todo) => {};
+
   return {
+    getUser,
     getTodos,
+    postTodo,
   };
 }

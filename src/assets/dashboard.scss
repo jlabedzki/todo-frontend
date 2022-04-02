@@ -1,0 +1,17 @@
+@import "../assets/variables.scss";
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  margin-top: 2rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  color: white;
+  font-family: $font-primary;
+}
