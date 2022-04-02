@@ -1,15 +1,9 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 
-export interface UserState {
-  userId: number | null;
-  username: string | null;
-}
-
 interface UserData {
-  user: UserState | null;
   login: Function;
   register: Function;
   logout: Function;
@@ -21,28 +15,23 @@ interface User {
 }
 
 export const userStateContext = createContext<UserData>({
-  user: null,
   login: () => {},
   register: () => {},
   logout: () => {},
 });
 
 export default function UserStateProvider(props: any) {
-  const [cookies, setCookie, removeCookie] = useCookies(["access_token"]);
-  const [user, setUser] = useState<UserState>({
-    userId: null,
-    username: null,
-  });
+  const [cookies, setCookie, removeCookie] = useCookies([
+    "access_token",
+    "username",
+    "user_id",
+  ]);
 
   const login = async (user: User) => {
     try {
       const { data } = await axios.post("/login", user);
       setCookie("access_token", data.access_token, {
         path: "/",
-      });
-      setUser({
-        userId: data.user_id,
-        username: data.username,
       });
     } catch (err: any) {
       throw new Error(err.message);
@@ -72,7 +61,6 @@ export default function UserStateProvider(props: any) {
   };
 
   const userData = {
-    user,
     login,
     register,
     logout,

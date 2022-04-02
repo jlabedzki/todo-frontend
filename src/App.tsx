@@ -1,15 +1,28 @@
 import "./assets/App.scss";
 import { useCookies } from "react-cookie";
-import Authenticate from "./components/authentication/Login";
-import Dashboard from "./views/Dashboard";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Authenticate from "./components/AuthenticationForm";
+import Dashboard from "./layout/Dashboard";
 
 function App() {
   const [cookies] = useCookies();
-
-  console.log("cookies", cookies);
+  const isLoggedIn = cookies.accessToken;
 
   return (
-    <>{!cookies.access_token ? <Authenticate></Authenticate> : <Dashboard />}</>
+    <Router>
+      <Routes>
+        <Route path="/login">
+          <Authenticate />
+        </Route>
+        <Route path="/dashboard">
+          <Dashboard />
+        </Route>
+        <Route path="/profile">
+          <p>Your profile</p>
+        </Route>
+      </Routes>
+    </Router>
+    // <>{!cookies.access_token ? <Authenticate></Authenticate> : <Dashboard />}</>
   );
 }
 
