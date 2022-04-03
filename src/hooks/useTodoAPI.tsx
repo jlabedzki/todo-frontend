@@ -1,7 +1,13 @@
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 type Method = "get" | "post" | "put" | "patch" | "delete";
+
+interface User {
+  username: string;
+  password: string;
+}
 
 interface Todo {
   id?: number;
@@ -11,8 +17,9 @@ interface Todo {
   completed?: boolean;
 }
 
-export default function useTodoAPI(userId?: number) {
-  const [cookies] = useCookies();
+export default function useTodoAPI() {
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const navigate = useNavigate();
 
   const client = axios.create({
     baseURL: process.env.REACT_APP_BACKEND_URL,
@@ -26,10 +33,12 @@ export default function useTodoAPI(userId?: number) {
       return response;
     },
     (error) => {
-      if (error.response.status === 401) {
-        //Todo: redirec to  login
+      if (error.response.status === 401 || error.response.status === 422) {
+        navigate("/login", { replace: true });
         throw new Error("Failed to authenticate request");
       }
+
+      console.log({ error });
       throw new Error("Failed to fetch data from API");
     }
   );
@@ -42,21 +51,44 @@ export default function useTodoAPI(userId?: number) {
     });
   };
 
+  //Authentication routes
+  const register = async (user: User) => {
+    return perform("post", "/register", user);
+  };
+
+  const login = async (user: User) => {
+    const { data } = await perform("post", "/login", user);
+    setCookie("access_token", data.access_token, {
+      path: "/",
+    });
+    return;
+  };
+
+  const logout = async () => {
+    await perform("get", "/logout");
+    removeCookie("access_token");
+    return;
+  };
+
   const getUser = () => {
     return perform("get", "/user");
   };
 
-  const getTodos = () => {
+  //Data routes
+  const getTodos = (userId: number) => {
     return perform("get", `/todos/${userId}`);
   };
 
-  const postTodo = (todo: Todo) => {
+  const postTodo = (userId: number, todo: Todo) => {
     return perform("post", `/todos/${userId}`, todo);
   };
 
   const patchTodo = (todo: Todo) => {};
 
   return {
+    register,
+    login,
+    logout,
     getUser,
     getTodos,
     postTodo,

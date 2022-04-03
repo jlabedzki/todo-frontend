@@ -1,21 +1,23 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { TextField, Button, InputAdornment, IconButton } from "@mui/material";
+import useTodoAPI from "../hooks/useTodoAPI";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
-import { useContext, useState } from "react";
-import { userStateContext } from "../context/AuthProvider";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import "../assets/authentication.scss";
 
 export default function Authenticate() {
-  const { login, register } = useContext(userStateContext);
-  const [needToRegister, setNeedToRegister] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [needToRegister, setNeedToRegister] = useState(false);
   const [message, setMessage] = useState({
     message: "",
     error: false,
   });
+  const { login, register } = useTodoAPI();
+  const navigate = useNavigate();
 
   const headerText = needToRegister ? "CREATE AN ACCOUNT" : "SIGN IN";
   const questionText = needToRegister
@@ -52,6 +54,7 @@ export default function Authenticate() {
 
     try {
       await login({ username, password });
+      navigate("/dashboard", { replace: true });
     } catch (err: any) {
       if (err.message.includes("404")) {
         setMessage({ message: "Invalid username.", error: true });
@@ -124,9 +127,9 @@ export default function Authenticate() {
       </Button>
       <div className="form-footer">
         {questionText}
-        <a id="register" onClick={() => setNeedToRegister(!needToRegister)}>
+        <Button onClick={() => setNeedToRegister(!needToRegister)}>
           Click here.
-        </a>
+        </Button>
       </div>
     </form>
   );

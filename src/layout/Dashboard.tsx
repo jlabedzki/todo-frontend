@@ -1,34 +1,15 @@
+import { useContext } from "react";
+import { userStateContext } from "../context/UserStateProvider";
 import UserDropdownMenu from "../components/UserDropdownMenu";
-import { useEffect, useState } from "react";
-import useTodoAPI from "../hooks/useTodoAPI";
-import { useCookies } from "react-cookie";
-import "../assets/dashboard.scss";
-
-export type UserState = {
-  userId: number;
-  username: string;
-} | null;
+import PomodoroDropdownMenu from "../components/PomodoroDropdownMenu";
 
 export default function Dashboard() {
-  const [user, setUser] = useState<UserState>(null);
-  const { getUser } = useTodoAPI();
-
-  useEffect(() => {
-    getUser().then(({ data }) => {
-      console.log("data", data);
-      setUser({ userId: data.user_id, username: data.username });
-    });
-  }, []);
-
   return (
-    <div className="main-content">
-      <div className="header">
-        <p>Pomodoro</p>
+    <div className="d-flex flex-column w-100 mt-4">
+      <div className="text-light d-flex justify-content-between">
+        <PomodoroDropdownMenu />
         <h2>Get It Done</h2>
-        <div>
-          {user?.username}
-          <UserDropdownMenu />
-        </div>
+        <UserDropdownMenu />
       </div>
     </div>
   );

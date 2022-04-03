@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
   Button,
   MenuList,
@@ -9,20 +8,12 @@ import {
   Paper,
   Popper,
 } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
+import TimerIcon from "@mui/icons-material/Timer";
 import useTodoAPI from "../hooks/useTodoAPI";
 
-export default function UserDropdownMenu() {
+export default function PomodoroDropdownMenu() {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
-  const { logout } = useTodoAPI();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login", { replace: true });
-    return;
-  };
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -68,7 +59,7 @@ export default function UserDropdownMenu() {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <PersonIcon htmlColor="white" fontSize="large" />
+        <TimerIcon htmlColor="white" fontSize="large" role="button" />
       </Button>
       <Popper
         open={open}
@@ -94,12 +85,9 @@ export default function UserDropdownMenu() {
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
                 >
-                  <MenuItem>
-                    <Link to="/profile" replace>
-                      Profile
-                    </Link>
+                  <MenuItem onClick={handleClose}>
+                    Start Pomodoro Session
                   </MenuItem>
-                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
