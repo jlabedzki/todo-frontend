@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Authenticate from "./components/AuthenticationForm";
 import Dashboard from "./layout/Dashboard";
-import UserStateProvider from "./context/UserStateProvider";
 
 function App() {
   const [cookies] = useCookies();
@@ -16,7 +15,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route
+        {/* <Route
           path="/"
           element={
             cookies.access_token ? (
@@ -25,27 +24,14 @@ function App() {
               <Navigate to="login" />
             )
           }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <UserStateProvider>
-              <Dashboard />
-            </UserStateProvider>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            !cookies.access_token ? (
-              <Authenticate />
-            ) : (
-              <Navigate to="dashboard" />
-            )
-          }
-        />
+        /> */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        {/* <Route path="/login" element={<Authenticate />} /> */}
         <Route path="/profile" element={<p>Your profile</p>} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+        <Route path="/login" element={<Authenticate />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );

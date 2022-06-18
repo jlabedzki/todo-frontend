@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { TextField, Button, InputAdornment, IconButton } from "@mui/material";
-import useTodoAPI from "../hooks/useTodoAPI";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import "../assets/authentication.scss";
+import useTodoAPI from "../hooks/useTodoAPI";
 
 export default function Authenticate() {
   const [username, setUsername] = useState("");

@@ -7,12 +7,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   display: flex;
   justify-content: center;
-  // background: linear-gradient(
-  //   110deg,
-  //   rgb(58, 62, 60) 60%,
-  //   rgb(94, 166, 190) 60%
-  // );
-  background-image: radial-gradient(rgb(58, 62, 60), rgb(48, 49, 49));
+  background: linear-gradient(
+    110deg,
+    rgb(52, 29, 85) 60%,
+    rgb(123, 42, 112) 60%
+  );
+  // background-image: radial-gradient(rgb(58, 62, 60), rgb(48, 49, 49));
 }
 
 #root {
